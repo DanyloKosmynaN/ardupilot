@@ -160,6 +160,9 @@ public:
     AP_Float onoff_pitch_rate;
     AP_Float onoff_yaw_mintime;
     AP_Float onoff_pitch_mintime;
+    AP_Float motor_output_limit;
+    AP_Float motor_pitch_deadband;
+    AP_Float motor_yaw_deadband;
     AP_Float yaw_trim;
     AP_Float pitch_trim;
     AP_Int16 yaw_range;             // yaw axis total range of motion in degrees
@@ -180,10 +183,14 @@ public:
     // AC_PID controllers
     AC_PID         pidPitch2Srv;
     AC_PID         pidYaw2Srv;
+    AC_PID         motor_pitch_pid;
+    AC_PID         motor_yaw_pid;
 
     Parameters() :
         pidPitch2Srv(0.2, 0.0f, 0.05f, 0.02f, 4000.0f, 0.0f, 0.0f, 0.0f, 0.1f),
-        pidYaw2Srv  (0.2, 0.0f, 0.05f, 0.02f, 4000.0f, 0.0f, 0.0f, 0.0f, 0.1f)
+        pidYaw2Srv  (0.2, 0.0f, 0.05f, 0.02f, 4000.0f, 0.0f, 0.0f, 0.0f, 0.1f),
+        motor_pitch_pid(0.2, 0.0f, 0.05f, 0.0f, 4000.0f, 0.0f, 0.0f, 0.0f, 0.1f),
+        motor_yaw_pid  (0.2, 0.0f, 0.05f, 0.0f, 4000.0f, 0.0f, 0.0f, 0.0f, 0.1f)
         {}
 };
 

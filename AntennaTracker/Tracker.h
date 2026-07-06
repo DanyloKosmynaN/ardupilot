@@ -62,6 +62,8 @@ public:
     friend class Parameters;
     friend class ModeAuto;
     friend class ModeGuided;
+    friend class ModeManual;
+    friend class ModeServoTest;
     friend class Mode;
 
     void arm_servos();
@@ -191,6 +193,9 @@ private:
     void update_yaw_position_servo(void);
     void update_yaw_onoff_servo(float yaw) const;
     void update_yaw_cr_servo(float yaw);
+    void update_pitch_motor_output(float pitch);
+    void update_yaw_motor_output(float yaw);
+    void set_motor_output(SRV_Channel::Function function, float command);
 
     // system.cpp
     void init_ardupilot() override;

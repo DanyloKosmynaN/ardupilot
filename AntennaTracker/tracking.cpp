@@ -110,13 +110,13 @@ void Tracker::update_tracking(void)
     if (!hal.util->get_soft_armed()) {
         switch ((PWMDisarmed)g.disarm_pwm.get()) {
         case PWMDisarmed::TRIM:
-            SRV_Channels::set_output_scaled(SRV_Channel::k_tracker_yaw, 0);
-            SRV_Channels::set_output_scaled(SRV_Channel::k_tracker_pitch, 0);
+            set_motor_output(SRV_Channel::k_tracker_yaw, 0.0f);
+            set_motor_output(SRV_Channel::k_tracker_pitch, 0.0f);
             break;
         default:
         case PWMDisarmed::ZERO:
-            SRV_Channels::set_output_pwm(SRV_Channel::k_tracker_yaw, 0);
-            SRV_Channels::set_output_pwm(SRV_Channel::k_tracker_pitch, 0);
+            set_motor_output(SRV_Channel::k_tracker_yaw, 0.0f);
+            set_motor_output(SRV_Channel::k_tracker_pitch, 0.0f);
             break;
         }
     } else {

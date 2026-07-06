@@ -32,27 +32,7 @@ void Tracker::init_servos()
  */
 void Tracker::update_pitch_servo(float pitch)
 {
-    // store the target/actual values for tuning because update_error() will reset them to zero
-    const AP_PIDInfo *pid_info = &g.pidPitch2Srv.get_pid_info();
-    const float target = pid_info->target, actual = pid_info->actual;
-
-    switch ((enum ServoType)g.servo_pitch_type.get()) {
-    case SERVO_TYPE_ONOFF:
-        update_pitch_onoff_servo(pitch);
-        break;
-
-    case SERVO_TYPE_CR:
-        update_pitch_cr_servo(pitch);
-        break;
-
-    case SERVO_TYPE_POSITION:
-    default:
-        update_pitch_position_servo();
-        break;
-    }
-
-    g.pidPitch2Srv.set_target_rate(target);
-    g.pidPitch2Srv.set_actual_rate(actual);
+    update_pitch_motor_output(pitch);
 }
 
 /**
@@ -141,27 +121,36 @@ void Tracker::update_pitch_cr_servo(float pitch)
  */
 void Tracker::update_yaw_servo(float yaw)
 {
-    // store the target/actual values for tuning because update_error() will reset them to zero
-    const AP_PIDInfo *pid_info = &g.pidYaw2Srv.get_pid_info();
-    const float target = pid_info->target, actual = pid_info->actual;
+    update_yaw_motor_output(yaw);
+}
 
-	switch ((enum ServoType)g.servo_yaw_type.get()) {
-    case SERVO_TYPE_ONOFF:
-        update_yaw_onoff_servo(yaw);
-        break;
+void Tracker::update_pitch_motor_output(float pitch)
+{
+    (void)pitch;
+    const float output = g.motor_pitch_pid.update_error(nav_status.angle_error_pitch, G_Dt);
+    set_motor_output(SRV_Channel::k_tracker_pitch, output);
+}
 
-    case SERVO_TYPE_CR:
-        update_yaw_cr_servo(yaw);
-        break;
+void Tracker::update_yaw_motor_output(float yaw)
+{
+    (void)yaw;
+    const float output = g.motor_yaw_pid.update_error(nav_status.angle_error_yaw, G_Dt);
+    set_motor_output(SRV_Channel::k_tracker_yaw, output);
+}
 
-    case SERVO_TYPE_POSITION:
-    default:
-        update_yaw_position_servo();
-        break;
+void Tracker::set_motor_output(SRV_Channel::Function function, float command)
+{
+    const float max_abs_command = constrain_float(g.motor_output_limit.get(), 1.0f, 100.0f);
+    float cmd = constrain_float(command, -max_abs_command, max_abs_command);
+
+    const float deadband = (function == SRV_Channel::k_tracker_pitch) ? g.motor_pitch_deadband.get() : g.motor_yaw_deadband.get();
+    if (fabsf(cmd) < deadband) {
+        cmd = 0.0f;
     }
 
-    g.pidYaw2Srv.set_target_rate(target);
-    g.pidYaw2Srv.set_actual_rate(actual);
+    const uint16_t pwm = 1500U + uint16_t(lroundf(cmd * 5.0f));
+    SRV_Channels::set_output_pwm(function, pwm);
+    SRV_Channels::constrain_pwm(function);
 }
 
 /**

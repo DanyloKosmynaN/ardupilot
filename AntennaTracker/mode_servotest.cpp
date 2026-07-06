@@ -20,16 +20,16 @@ bool ModeServoTest::set_servo(uint8_t servo_num, uint16_t pwm)
 
     hal.rcout->cork();
 
-    // set yaw servo pwm and send output to servo
+    // set yaw motor command and send output over SBUS
     if (servo_num == CH_YAW) {
-        SRV_Channels::set_output_pwm(SRV_Channel::k_tracker_yaw, pwm);
-        SRV_Channels::constrain_pwm(SRV_Channel::k_tracker_yaw);
+        const float yaw_cmd = (static_cast<float>(pwm) - 1500.0f) / 5.0f;
+        tracker.set_motor_output(SRV_Channel::k_tracker_yaw, yaw_cmd);
     }
 
-    // set pitch servo pwm and send output to servo
+    // set pitch motor command and send output over SBUS
     if (servo_num == CH_PITCH) {
-        SRV_Channels::set_output_pwm(SRV_Channel::k_tracker_pitch, pwm);
-        SRV_Channels::constrain_pwm(SRV_Channel::k_tracker_pitch);
+        const float pitch_cmd = (static_cast<float>(pwm) - 1500.0f) / 5.0f;
+        tracker.set_motor_output(SRV_Channel::k_tracker_pitch, pitch_cmd);
     }
 
     SRV_Channels::calc_pwm();

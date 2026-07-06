@@ -127,6 +127,30 @@ const AP_Param::Info Tracker::var_info[] = {
     // @User: Standard
     GSCALAR(onoff_pitch_mintime,   "ONOFF_PITCH_MINT", 0.1f),
 
+    // @Param: MOTOR_CMD_MAX
+    // @DisplayName: Maximum SBUS motor command
+    // @Description: Maximum magnitude of the SBUS motor command sent to the Pico. Positive values command pan/tilt in the positive direction, negative values in the negative direction.
+    // @Range: 1 100
+    // @Increment: 1
+    // @User: Advanced
+    GSCALAR(motor_output_limit,   "MOTOR_CMD_MAX", 100.0f),
+
+    // @Param: MOTOR_PITCH_DB
+    // @DisplayName: Pitch deadband
+    // @Description: Deadband applied to the pitch motor command before sending it to the Pico.
+    // @Range: 0 20
+    // @Increment: 1
+    // @User: Advanced
+    GSCALAR(motor_pitch_deadband, "MOTOR_PITCH_DB", 2.0f),
+
+    // @Param: MOTOR_YAW_DB
+    // @DisplayName: Yaw deadband
+    // @Description: Deadband applied to the yaw motor command before sending it to the Pico.
+    // @Range: 0 20
+    // @Increment: 1
+    // @User: Advanced
+    GSCALAR(motor_yaw_deadband,   "MOTOR_YAW_DB", 2.0f),
+
     // @Param: YAW_TRIM
     // @DisplayName: Yaw trim
     // @Description: Amount of extra yaw to add when tracking. This allows for small adjustments for an out of trim compass.
@@ -356,6 +380,37 @@ const AP_Param::Info Tracker::var_info[] = {
 
     GGROUP(pidPitch2Srv,       "PITCH2SRV_", AC_PID),
 
+    // @Param: MOT_PITCH_P
+    // @DisplayName: Pitch motor controller P gain
+    // @Description: Pitch motor controller P gain. Converts pitch tracking error into a normalized motor command for the Pico.
+    // @Range: 0.0 3.0
+    // @Increment: 0.01
+    // @User: Advanced
+
+    // @Param: MOT_PITCH_I
+    // @DisplayName: Pitch motor controller I gain
+    // @Description: Pitch motor controller I gain.
+    // @Range: 0.0 3.0
+    // @Increment: 0.01
+    // @User: Advanced
+
+    // @Param: MOT_PITCH_IMAX
+    // @DisplayName: Pitch motor controller I gain maximum
+    // @Description: Pitch motor controller I gain maximum.
+    // @Range: 0 4000
+    // @Increment: 10
+    // @Units: d%
+    // @User: Advanced
+
+    // @Param: MOT_PITCH_D
+    // @DisplayName: Pitch motor controller D gain
+    // @Description: Pitch motor controller D gain.
+    // @Range: 0.001 0.1
+    // @Increment: 0.001
+    // @User: Advanced
+
+    GGROUP(motor_pitch_pid,     "MOT_PITCH_", AC_PID),
+
     // @Param: YAW2SRV_P
     // @DisplayName: Yaw axis controller P gain
     // @Description: Yaw axis controller P gain.  Converts the difference between desired yaw angle (heading) and actual yaw angle into a yaw servo pwm change
@@ -451,6 +506,37 @@ const AP_Param::Info Tracker::var_info[] = {
     // @User: Advanced
 
     GGROUP(pidYaw2Srv,         "YAW2SRV_", AC_PID),
+
+    // @Param: MOT_YAW_P
+    // @DisplayName: Yaw motor controller P gain
+    // @Description: Yaw motor controller P gain. Converts yaw tracking error into a normalized motor command for the Pico.
+    // @Range: 0.0 3.0
+    // @Increment: 0.01
+    // @User: Advanced
+
+    // @Param: MOT_YAW_I
+    // @DisplayName: Yaw motor controller I gain
+    // @Description: Yaw motor controller I gain.
+    // @Range: 0.0 3.0
+    // @Increment: 0.01
+    // @User: Advanced
+
+    // @Param: MOT_YAW_IMAX
+    // @DisplayName: Yaw motor controller I gain maximum
+    // @Description: Yaw motor controller I gain maximum.
+    // @Range: 0 4000
+    // @Increment: 10
+    // @Units: d%
+    // @User: Advanced
+
+    // @Param: MOT_YAW_D
+    // @DisplayName: Yaw motor controller D gain
+    // @Description: Yaw motor controller D gain.
+    // @Range: 0.001 0.1
+    // @Increment: 0.001
+    // @User: Advanced
+
+    GGROUP(motor_yaw_pid,       "MOT_YAW_", AC_PID),
 
     // @Param: CMD_TOTAL
     // @DisplayName: Number of loaded mission items

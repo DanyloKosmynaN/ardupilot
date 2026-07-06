@@ -10,10 +10,9 @@
  */
 void ModeManual::update()
 {
-    // copy yaw and pitch input to output
-    SRV_Channels::set_output_pwm(SRV_Channel::k_tracker_yaw, rc().channel(CH_YAW)->get_radio_in());
-    SRV_Channels::constrain_pwm(SRV_Channel::k_tracker_yaw);
+    const float yaw_cmd = (rc().channel(CH_YAW)->get_radio_in() - 1500.0f) / 5.0f;
+    const float pitch_cmd = (rc().channel(CH_PITCH)->get_radio_in() - 1500.0f) / 5.0f;
 
-    SRV_Channels::set_output_pwm(SRV_Channel::k_tracker_pitch, rc().channel(CH_PITCH)->get_radio_in());
-    SRV_Channels::constrain_pwm(SRV_Channel::k_tracker_pitch);
+    tracker.set_motor_output(SRV_Channel::k_tracker_yaw, yaw_cmd);
+    tracker.set_motor_output(SRV_Channel::k_tracker_pitch, pitch_cmd);
 }
