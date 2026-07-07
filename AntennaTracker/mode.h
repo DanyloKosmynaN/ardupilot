@@ -11,6 +11,7 @@ public:
         SCAN=2,
         SERVOTEST=3,
         GUIDED=4,
+        MAVLINK=5,
         AUTO=10,
         INITIALISING=16
         // Mode number 30 reserved for "offboard" for external/lua control.
@@ -87,6 +88,25 @@ private:
     float _yaw_rate_rads;
     bool _use_pitch_rate;
     float _pitch_rate_rads;
+};
+
+class ModeMAVLink : public Mode {
+public:
+    Mode::Number number() const override { return Mode::Number::MAVLINK; }
+    const char* name() const override { return "MAVLink"; }
+    bool requires_armed_servos() const override { return true; }
+    void update() override;
+
+    void set_target(float target_yaw_deg, float target_pitch_deg) {
+        _target_yaw_deg = target_yaw_deg;
+        _target_pitch_deg = target_pitch_deg;
+    }
+    float get_target_yaw_deg() const { return _target_yaw_deg; }
+    float get_target_pitch_deg() const { return _target_pitch_deg; }
+
+private:
+    float _target_yaw_deg;
+    float _target_pitch_deg;
 };
 
 class ModeInitialising : public Mode {

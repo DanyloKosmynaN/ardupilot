@@ -62,6 +62,7 @@ public:
     friend class Parameters;
     friend class ModeAuto;
     friend class ModeGuided;
+    friend class ModeMAVLink;
     friend class ModeManual;
     friend class ModeServoTest;
     friend class Mode;
@@ -103,6 +104,7 @@ private:
     ModeInitialising mode_initialising;
     ModeManual mode_manual;
     ModeGuided mode_guided;
+    ModeMAVLink mode_mavlink;
     ModeScan mode_scan;
     ModeServoTest mode_servotest;
     ModeStop mode_stop;

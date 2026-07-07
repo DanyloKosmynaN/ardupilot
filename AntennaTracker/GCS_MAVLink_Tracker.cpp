@@ -29,6 +29,7 @@ uint8_t GCS_MAVLINK_Tracker::base_mode() const
     case Mode::Number::SERVOTEST:
     case Mode::Number::AUTO:
     case Mode::Number::GUIDED:
+    case Mode::Number::MAVLINK:
         _base_mode |= MAV_MODE_FLAG_GUIDED_ENABLED |
             MAV_MODE_FLAG_STABILIZE_ENABLED;
         // note that MAV_MODE_FLAG_AUTO_ENABLED does not match what
@@ -96,6 +97,21 @@ void GCS_MAVLINK_Tracker::send_attitude_target()
     } else if (tracker.mode->number() == Mode::Number::AUTO) {
         float yaw = tracker.mode_auto.get_auto_target_yaw_deg();
         float pitch = tracker.mode_auto.get_auto_target_pitch_deg();
+        quat.from_euler(0, radians(pitch), radians(yaw));
+        quat_out[0] = quat.q1;
+        quat_out[1] = quat.q2;
+        quat_out[2] = quat.q3;
+        quat_out[3] = quat.q4;
+
+        typemask |=
+            ATTITUDE_TARGET_TYPEMASK_BODY_YAW_RATE_IGNORE |
+            ATTITUDE_TARGET_TYPEMASK_BODY_PITCH_RATE_IGNORE |
+            ATTITUDE_TARGET_TYPEMASK_BODY_ROLL_RATE_IGNORE |
+            ATTITUDE_TARGET_TYPEMASK_THROTTLE_IGNORE;
+
+    } else if (tracker.mode->number() == Mode::Number::MAVLINK) {
+        const float yaw = tracker.mode_mavlink.get_target_yaw_deg();
+        const float pitch = tracker.mode_mavlink.get_target_pitch_deg();
         quat.from_euler(0, radians(pitch), radians(yaw));
         quat_out[0] = quat.q1;
         quat_out[1] = quat.q2;
@@ -373,6 +389,11 @@ MAV_RESULT GCS_MAVLINK_Tracker::handle_command_int_packet(const mavlink_command_
         tracker.set_mode(tracker.mode_auto, ModeReason::GCS_COMMAND);
         return MAV_RESULT_ACCEPTED;
 
+    case MAV_CMD_DO_MOUNT_CONTROL:
+        tracker.set_mode(tracker.mode_mavlink, ModeReason::GCS_COMMAND);
+        tracker.mode_mavlink.set_target(packet.param3, packet.param2);
+        return MAV_RESULT_ACCEPTED;
+
     default:
         return GCS_MAVLINK::handle_command_int_packet(packet, msg);
     }
@@ -575,6 +596,7 @@ uint8_t GCS_MAVLINK_Tracker::send_available_mode(uint8_t index) const
         &tracker.mode_stop,
         &tracker.mode_scan,
         &tracker.mode_guided,
+        &tracker.mode_mavlink,
         &tracker.mode_servotest,
         &tracker.mode_auto,
         &tracker.mode_initialising,

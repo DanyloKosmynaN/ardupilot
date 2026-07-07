@@ -217,6 +217,9 @@ bool Tracker::set_mode(const uint8_t new_mode, const ModeReason reason)
     case Mode::Number::GUIDED:
         fred = &mode_guided;
         break;
+    case Mode::Number::MAVLINK:
+        fred = &mode_mavlink;
+        break;
     }
     if (fred == nullptr) {
         return false;

@@ -578,7 +578,7 @@ const AP_Param::Info Tracker::var_info[] = {
     // @DisplayName: Mode tracker will switch into after initialization
     // @Description: 0:MANUAL, 1:STOP, 2:SCAN, 10:AUTO
     // @User: Standard
-    GSCALAR(initial_mode,            "INITIAL_MODE",     10),
+    GSCALAR(initial_mode,            "INITIAL_MODE",     0),
 
     // @Param: SAFE_DISARM_PWM
     // @DisplayName: PWM that will be output when disarmed or in stop mode
