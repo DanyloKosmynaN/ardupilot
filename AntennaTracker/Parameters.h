@@ -111,6 +111,8 @@ public:
         k_param_channel_pitch_old,
         k_param_pidPitch2Srv,
         k_param_pidYaw2Srv,
+        k_param_motor_pitch_pid,
+        k_param_motor_yaw_pid,
         k_param_rc_channels,
         k_param_servo_channels,
 
