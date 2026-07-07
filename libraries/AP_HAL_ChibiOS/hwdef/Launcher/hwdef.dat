@@ -181,7 +181,7 @@ BARO DPS280 I2C:0:0x77 #or DPS310
 BARO BMP388 I2C:1:0x76 #or BMP390
 
 # also allow for probing of external barometers
-define HAL_PROBE_EXTERNAL_I2C_BAROS
+define AP_BARO_PROBE_EXTERNAL_I2C_BUSES 1
 
 #------------------------------COMPASS---------------------------------
 # no built-in compass, but probe the i2c bus for all possible
