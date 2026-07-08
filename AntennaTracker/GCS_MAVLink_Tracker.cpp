@@ -391,7 +391,7 @@ MAV_RESULT GCS_MAVLINK_Tracker::handle_command_int_packet(const mavlink_command_
 
     case MAV_CMD_DO_MOUNT_CONTROL:
         tracker.set_mode(tracker.mode_mavlink, ModeReason::GCS_COMMAND);
-        tracker.mode_mavlink.set_target(packet.param3, packet.param2);
+        tracker.mode_mavlink.set_target(packet.param3, packet.param1);
         return MAV_RESULT_ACCEPTED;
 
     default:
