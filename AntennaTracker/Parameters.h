@@ -79,9 +79,6 @@ public:
         k_param_onoff_pitch_rate,
         k_param_onoff_yaw_mintime,
         k_param_onoff_pitch_mintime,
-        k_param_motor_output_limit,
-        k_param_motor_pitch_deadband,
-        k_param_motor_yaw_deadband,
         k_param_yaw_trim,
         k_param_pitch_trim,
         k_param_yaw_range,
@@ -104,6 +101,16 @@ public:
         k_param_gcs5_unused,        // unused in ArduPilot-4.7
         k_param_gcs6_unused,        // unused in ArduPilot-4.7
 
+        // Custom motor-control parameters (Pico pan/tilt). Explicit key
+        // values in an unused slot so they do not shift the auto-numbered
+        // keys above (which would collide with the k_param_serial_manager_old
+        // block at 144 and panic with "Bad parameter table").
+        k_param_motor_output_limit = 160,
+        k_param_motor_pitch_deadband,
+        k_param_motor_yaw_deadband,
+        k_param_motor_pitch_pid,
+        k_param_motor_yaw_pid,
+
         //
         // 200 : Radio settings
         //
@@ -111,8 +118,6 @@ public:
         k_param_channel_pitch_old,
         k_param_pidPitch2Srv,
         k_param_pidYaw2Srv,
-        k_param_motor_pitch_pid,
-        k_param_motor_yaw_pid,
         k_param_rc_channels,
         k_param_servo_channels,
 
