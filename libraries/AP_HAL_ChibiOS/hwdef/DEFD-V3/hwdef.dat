@@ -167,14 +167,14 @@ define HAL_BATT_VOLT_SCALE 21
 define HAL_BATT_CURR_SCALE 40.0
 
 #------------------------------IMU-------------------------------------
+IMU Invensensev3 SPI:icm42688 ROTATION_PITCH_180
+IMU Invensensev3 SPI:icm42688_2 ROTATION_PITCH_180
+IMU BMI270 SPI:bmi270 ROTATION_PITCH_180
 
-# Main flight IMUs, explicitly forced
-IMU Invensensev3 SPI:icm42688 ROTATION_PITCH_180 INSTANCE:0
-IMU Invensensev3 SPI:icm42688_2 ROTATION_PITCH_180 INSTANCE:1
-IMU BMI270 SPI:bmi270 ROTATION_PITCH_180 INSTANCE:2
+# Enable all IMUs to be used and therefore three active EKF Lanes
+define HAL_EKF_IMU_MASK_DEFAULT 7
 
 define HAL_DEFAULT_INS_FAST_SAMPLE 7
-define HAL_EKF_IMU_MASK_DEFAULT 7
 
 #------------------------------BARO------------------------------------
 BARO DPS280 I2C:0:0x77 #or DPS310
@@ -247,7 +247,7 @@ PB0 LED0 OUTPUT HIGH GPIO(1) # B/E blue (red)
 PB1 LED1 OUTPUT HIGH GPIO(2) # ACT green (yellow)
 define HAL_GPIO_A_LED_PIN 2
 define HAL_GPIO_B_LED_PIN 1
-
+define AP_NOTIFY_GPIO_LED_2_ENABLED 1
 
 
 #------------------------------POWER ENABLE-----------------------------
@@ -277,9 +277,3 @@ DMA_NOSHARE SPI1* SPI2* TIM1*
 #define AP_BOOTLOADER_FLASHING_ENABLED 0
 
 define EK3_FEATURE_POSITION_RESET 1
-
-define AP_LTM_TELEM_ENABLED 0
-
-define HAL_LANDING_DEEPSTALL_ENABLED 0
-
-define HAL_ADSB_ENABLED 0
